@@ -20,6 +20,8 @@
 </template>
 
 <script>
+const numImage = 30;
+
 export default {
   data: () => ({
     selectedImage: require(`@/assets/icon.png`),
@@ -28,8 +30,8 @@ export default {
     running: false
   }),
   methods: {
-    getImageData() {
-      for (let i = 1; i < 11; i++) {
+    getImageData(n) {
+      for (let i = 1; i < n + 1; i++) {
         this.images.push(require(`@/assets/slot_images/image_${i}.png`));
       }
     },
@@ -45,7 +47,7 @@ export default {
     }
   },
   mounted() {
-    this.getImageData();
+    this.getImageData(numImage);
   }
 };
 </script>
