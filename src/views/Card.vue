@@ -4,20 +4,12 @@
       <v-flex xs12>
         <v-layout justify-center>
           <div ref="cardCont" class="cardCont" contain @click="startSlot">
-            <div
-              ref="cardFront"
-              class="my-3 cardFront"
-              :style="{
-                'background-image': 'url(' + frontImage + ')'
-              }"
-            ></div>
-            <div
-              ref="cardBack"
-              class="my-3 cardBack"
-              :style="{
-                'background-image': 'url(' + selectedImage + ')'
-              }"
-            ></div>
+            <div ref="cardFront" class="my-3 cardFront">
+              <v-img :src="frontImage" contain></v-img>
+            </div>
+            <div ref="cardBack" class="my-3 cardBack">
+              <v-img :src="selectedImage" contain></v-img>
+            </div>
           </div>
         </v-layout>
       </v-flex>
@@ -68,7 +60,7 @@ export default {
 <style scoped>
 .cardCont {
   height: 320px;
-  min-width: 200px;
+  min-width: 230px;
   padding-right: 100px;
   position: relative;
 }
@@ -77,11 +69,14 @@ export default {
   /* 重ねて表示する用 */
   position: absolute;
   height: 320px;
-  min-width: 200px;
+  min-width: 230px;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
   -ms-backface-visibility: hidden;
+}
+.cardBack {
   border: solid 2px #444;
+  padding: 5px;
 }
 </style>
