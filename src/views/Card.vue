@@ -3,7 +3,7 @@
     <v-layout text-xs-center wrap>
       <v-flex xs12>
         <v-layout justify-center>
-          <div ref="cardCont" class="cardCont" contain @click="startSlot">
+          <div ref="cardCont" class="cardCont" contain @click="flipCard">
             <div ref="cardFront" class="my-3 cardFront">
               <v-img :src="frontImage" contain></v-img>
             </div>
@@ -24,7 +24,7 @@ CSSPlugin.defaultTransformPerspective = 1000;
 
 export default {
   data: () => ({
-    selectedImage: require(`@/assets/icon.png`),
+    selectedImage: "",
     frontImage: require(`@/assets/card_back_yellow.png`),
     images: [],
     timeId: 0,
@@ -37,18 +37,21 @@ export default {
         this.images.push(require(`@/assets/slot_images/image_${i}.png`));
       }
     },
-    startSlot() {
+    selectImage() {
+      let imageIdx = Math.floor(Math.random() * this.images.length);
+      this.selectedImage = this.images[imageIdx];
+    },
+    flipCard() {
       this.reversed ? this.tl.play() : this.tl.reverse();
       this.reversed = !this.reversed;
     }
   },
   mounted() {
     this.getImageData(numImage);
-    let imageIdx = Math.floor(Math.random() * this.images.length);
-    this.selectedImage = this.images[imageIdx];
     TweenMax.set(this.$refs.cardBack, { rotationY: -180 });
     this.tl = new TimelineMax({ paused: true });
     this.tl
+      .call(this.selectImage)
       .to(this.$refs.cardFront, 1, { rotationY: 180 })
       .to(this.$refs.cardBack, 1, { rotationY: 0 }, 0)
       .to(this.$refs.cardCont, 0.5, { z: 50 }, 0)
