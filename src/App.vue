@@ -4,22 +4,26 @@
       <v-toolbar-title class="headline">
         <span class="font-weight-bold">Brain Slot!!</span>
       </v-toolbar-title>
+      <v-toolbar-items>
+        <v-btn flat>
+          <router-link to="/" tag="span">Slot mode!!</router-link>
+        </v-btn>
+        <v-btn flat>
+          <router-link to="/card" tag="span">Card mode!!</router-link>
+        </v-btn>
+      </v-toolbar-items>
     </v-toolbar>
 
     <v-content>
-      <SlotContent />
+      <router-view></router-view>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import SlotContent from "@/components/SlotContent";
-
 export default {
   name: "App",
-  components: {
-    SlotContent
-  },
+  components: {},
   data() {
     return {
       //

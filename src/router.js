@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Home from "./views/Home.vue";
+import SlotContent from "./views/Slot.vue";
+import CardContent from "./views/Card.vue";
 
 Vue.use(Router);
 
@@ -8,8 +9,13 @@ export default new Router({
   routes: [
     {
       path: "/",
-      name: "home",
-      component: Home
+      name: "slot",
+      component: SlotContent
+    },
+    {
+      path: "/card",
+      name: "card",
+      component: CardContent
     }
   ]
 });
