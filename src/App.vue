@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-toolbar app>
+    <v-toolbar app color="teal" dark>
       <v-toolbar-title class="headline">
         <span class="font-weight-bold">Brain Slot!!</span>
       </v-toolbar-title>
