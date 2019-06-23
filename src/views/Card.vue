@@ -25,7 +25,7 @@
               :key="i"
               v-show="!shuffled"
               class="cardDummy"
-              :class="refCardDummy(i)"
+              :class="classCardDummy(i)"
               @click="shuffleCard"
             >
               <v-img :src="frontImage" contain></v-img>
@@ -63,11 +63,42 @@ export default {
       let imageIdx = Math.floor(Math.random() * this.images.length);
       this.selectedImage = this.images[imageIdx];
     },
+    defineShuffleAnimation() {
+      this.tlShuffle = new TimelineMax({
+        paused: true,
+        onComplete: this.destroyDummy
+      });
+      this.tlShuffle.to(".cardDummy", 1, { top: 0, left: 0 });
+    },
+    defineFlipAnimation() {
+      TweenMax.set(this.$refs.cardBack, { rotationY: -180 });
+      this.tlFrip = new TimelineMax({
+        onStart: this.changeReversedStatus,
+        onReverseComplete: this.changeReversedStatus,
+        paused: true
+      });
+      this.tlFrip
+        .to(this.$refs.cardFront, 0.75, { rotationY: 180 }, 0)
+        .to(this.$refs.cardBack, 0.75, { rotationY: 0 }, 0)
+        .to(this.$refs.cardCont, 0.375, { z: 50 }, 0)
+        .to(this.$refs.cardCont, 0.375, { z: 0 }, 0.375)
+        .call(this.selectImage, null, null, 0.1); // 第4引数 の position は 0.1 くらいにしないとチラつく
+    },
     flipCard() {
       this.reversed ? this.tlFrip.play() : this.tlFrip.reverse();
     },
     changeReversedStatus() {
       this.reversed = !this.reversed;
+    },
+    setDummyPosition() {
+      for (let i = 1; i <= this.numDummyCards; i++) {
+        let dummyHeight = Math.floor(Math.random() * 1000);
+        let dummyLeft = Math.floor(Math.random() * 1000 - 500); // -500 ~ 500
+        TweenMax.set(`.cardDummyPosition${i}`, {
+          top: `${dummyHeight}px`,
+          left: `${dummyLeft}px`
+        });
+      }
     },
     shuffleCard() {
       this.tlShuffle.play();
@@ -75,39 +106,16 @@ export default {
     destroyDummy() {
       this.shuffled = true;
     },
-    refCardDummy(i) {
+    // あんまりいい方法じゃない気がする
+    classCardDummy(i) {
       return `cardDummyPosition${i}`;
     }
   },
   mounted() {
     this.getImageData(numImage);
-
-    TweenMax.set(this.$refs.cardBack, { rotationY: -180 });
-    this.tlFrip = new TimelineMax({
-      onStart: this.changeReversedStatus,
-      onReverseComplete: this.changeReversedStatus,
-      paused: true
-    });
-    this.tlFrip
-      .to(this.$refs.cardFront, 0.75, { rotationY: 180 }, 0)
-      .to(this.$refs.cardBack, 0.75, { rotationY: 0 }, 0)
-      .to(this.$refs.cardCont, 0.375, { z: 50 }, 0)
-      .to(this.$refs.cardCont, 0.375, { z: 0 }, 0.375)
-      .call(this.selectImage, null, null, 0.1); // 第4引数 の position は 0.1 くらいにしないとチラつく
-
-    for (let i = 1; i <= this.numDummyCards; i++) {
-      let dummyHeight = Math.floor(Math.random() * 1000);
-      let dummyLeft = Math.floor(Math.random() * 1000 - 500); // -500 ~ 500
-      TweenMax.set(`.cardDummyPosition${i}`, {
-        top: `${dummyHeight}px`,
-        left: `${dummyLeft}px`
-      });
-    }
-    this.tlShuffle = new TimelineMax({
-      paused: true,
-      onComplete: this.destroyDummy
-    });
-    this.tlShuffle.to(".cardDummy", 1, { top: 0, left: 0 });
+    this.defineFlipAnimation();
+    this.setDummyPosition();
+    this.defineShuffleAnimation();
   }
 };
 </script>
