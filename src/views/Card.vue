@@ -35,7 +35,6 @@ export default {
     selectedImage: "",
     frontImage: require(`@/assets/card_back_yellow.png`),
     images: [],
-    timeId: 0,
     reversed: true,
     shuffled: false,
     tlFrip: null,
