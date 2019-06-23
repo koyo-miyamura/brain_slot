@@ -3,12 +3,20 @@
     <v-layout text-xs-center wrap>
       <v-flex xs12>
         <v-layout justify-center>
-          <div ref="cardCont" class="cardCont" contain @click="flipCard">
-            <div ref="cardFront" class="cardFront">
+          <div ref="cardCont" class="cardCont" contain>
+            <div ref="cardFront" class="cardFront" @click="flipCard">
               <v-img :src="frontImage" contain></v-img>
             </div>
-            <div ref="cardBack" class="cardBack">
+            <div ref="cardBack" class="cardBack" @click="flipCard">
               <v-img :src="selectedImage" contain></v-img>
+            </div>
+            <div
+              v-show="!shuffled"
+              class="cardDummy"
+              ref="cardDummy"
+              @click="shuffleCard"
+            >
+              <v-img :src="frontImage" contain></v-img>
             </div>
           </div>
         </v-layout>
@@ -29,7 +37,9 @@ export default {
     images: [],
     timeId: 0,
     reversed: true,
-    tl: null
+    shuffled: false,
+    tlFrip: null,
+    tlShuffle: null
   }),
   methods: {
     getImageData(n) {
@@ -42,26 +52,47 @@ export default {
       this.selectedImage = this.images[imageIdx];
     },
     flipCard() {
-      this.reversed ? this.tl.play() : this.tl.reverse();
+      this.reversed ? this.tlFrip.play() : this.tlFrip.reverse();
     },
     changeReversedStatus() {
       this.reversed = !this.reversed;
+    },
+    shuffleCard() {
+      this.tlShuffle.play();
+    },
+    destroyDummy() {
+      if (this.$refs.cardDummy != null) {
+        this.$refs.cardDummy.remove();
+        this.shuffled = true;
+      }
     }
   },
   mounted() {
     this.getImageData(numImage);
+
     TweenMax.set(this.$refs.cardBack, { rotationY: -180 });
-    this.tl = new TimelineMax({
+    this.tlFrip = new TimelineMax({
       onStart: this.changeReversedStatus,
       onReverseComplete: this.changeReversedStatus,
       paused: true
     });
-    this.tl
+    this.tlFrip
       .to(this.$refs.cardFront, 0.75, { rotationY: 180 }, 0)
       .to(this.$refs.cardBack, 0.75, { rotationY: 0 }, 0)
       .to(this.$refs.cardCont, 0.375, { z: 50 }, 0)
       .to(this.$refs.cardCont, 0.375, { z: 0 }, 0.375)
       .call(this.selectImage, null, null, 0.1); // 第4引数 の position は 0.1 くらいにしないとチラつく
+
+    let dummyHeight = Math.floor(Math.random() * 500);
+    let dummyLeft = Math.floor(-Math.random() * 100);
+    TweenMax.set(this.$refs.cardDummy, {
+      top: `${dummyHeight}px`,
+      left: `${dummyLeft}px`
+    });
+    this.tlShuffle = new TimelineMax({ paused: true });
+    this.tlShuffle
+      .to(this.$refs.cardDummy, 1, { top: 0, left: 0 })
+      .call(this.destroyDummy, null, null);
   }
 };
 </script>
@@ -74,9 +105,9 @@ export default {
   position: relative;
 }
 .cardFront,
-.cardBack {
-  /* 重ねて表示する用 */
-  position: absolute;
+.cardBack,
+.cardDummy {
+  position: absolute; /* 重ねて表示する用 */
   height: 320px;
   min-width: 230px;
   backface-visibility: hidden;
