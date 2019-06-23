@@ -5,11 +5,11 @@
         <span class="font-weight-bold">Brain Slot!!</span>
       </v-toolbar-title>
       <v-toolbar-items>
-        <v-btn flat>
-          <router-link to="/" tag="span">Slot mode!!</router-link>
+        <v-btn flat to="/">
+          Slot
         </v-btn>
-        <v-btn flat>
-          <router-link to="/card" tag="span">Card mode!!</router-link>
+        <v-btn flat to="/card">
+          Card
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
