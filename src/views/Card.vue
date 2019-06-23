@@ -4,10 +4,10 @@
       <v-flex xs12>
         <v-layout justify-center>
           <div ref="cardCont" class="cardCont" contain @click="flipCard">
-            <div ref="cardFront" class="my-3 cardFront">
+            <div ref="cardFront" class="cardFront">
               <v-img :src="frontImage" contain></v-img>
             </div>
-            <div ref="cardBack" class="my-3 cardBack">
+            <div ref="cardBack" class="cardBack">
               <v-img :src="selectedImage" contain></v-img>
             </div>
           </div>
@@ -52,7 +52,7 @@ export default {
     this.getImageData(numImage);
     TweenMax.set(this.$refs.cardBack, { rotationY: -180 });
     this.tl = new TimelineMax({
-      onStartComplete: this.changeReversedStatus,
+      onStart: this.changeReversedStatus,
       onReverseComplete: this.changeReversedStatus,
       paused: true
     });
