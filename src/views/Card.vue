@@ -47,7 +47,7 @@ export default {
     selectedImage: "",
     frontImage: require(`@/assets/card_back_yellow.png`),
     images: [],
-    numDummyCards: 10,
+    numDummyCards: 30,
     reversed: true,
     shuffled: false,
     tlFrip: null,
