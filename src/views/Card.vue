@@ -51,11 +51,11 @@ export default {
     TweenMax.set(this.$refs.cardBack, { rotationY: -180 });
     this.tl = new TimelineMax({ paused: true });
     this.tl
-      .call(this.selectImage)
-      .to(this.$refs.cardFront, 1, { rotationY: 180 })
-      .to(this.$refs.cardBack, 1, { rotationY: 0 }, 0)
-      .to(this.$refs.cardCont, 0.5, { z: 50 }, 0)
-      .to(this.$refs.cardCont, 0.5, { z: 0 }, 0.5);
+      .to(this.$refs.cardFront, 0.75, { rotationY: 180 }, 0)
+      .to(this.$refs.cardBack, 0.75, { rotationY: 0 }, 0)
+      .to(this.$refs.cardCont, 0.375, { z: 50 }, 0)
+      .to(this.$refs.cardCont, 0.375, { z: 0 }, 0.375)
+      .call(this.selectImage, null, null, 0.1);
   }
 };
 </script>
