@@ -61,7 +61,7 @@ export default {
       .to(this.$refs.cardBack, 0.75, { rotationY: 0 }, 0)
       .to(this.$refs.cardCont, 0.375, { z: 50 }, 0)
       .to(this.$refs.cardCont, 0.375, { z: 0 }, 0.375)
-      .call(this.selectImage, null, null, 0.1);
+      .call(this.selectImage, null, null, 0.1); // 第4引数 の position は 0.1 くらいにしないとチラつく
   }
 };
 </script>
