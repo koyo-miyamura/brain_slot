@@ -21,17 +21,11 @@
               <v-img :src="selectedImage" contain></v-img>
             </div>
             <div
+              v-for="i in numDummyCards"
+              :key="i"
               v-show="!shuffled"
               class="cardDummy"
-              ref="cardDummy"
-              @click="shuffleCard"
-            >
-              <v-img :src="frontImage" contain></v-img>
-            </div>
-            <div
-              v-show="!shuffled"
-              class="cardDummy"
-              ref="cardDummy2"
+              :class="refCardDummy(i)"
               @click="shuffleCard"
             >
               <v-img :src="frontImage" contain></v-img>
@@ -53,6 +47,7 @@ export default {
     selectedImage: "",
     frontImage: require(`@/assets/card_back_yellow.png`),
     images: [],
+    numDummyCards: 10,
     reversed: true,
     shuffled: false,
     tlFrip: null,
@@ -78,11 +73,10 @@ export default {
       this.tlShuffle.play();
     },
     destroyDummy() {
-      if (this.$refs.cardDummy != null) {
-        this.$refs.cardDummy.remove();
-        this.$refs.cardDummy2.remove();
-        this.shuffled = true;
-      }
+      this.shuffled = true;
+    },
+    refCardDummy(i) {
+      return `cardDummyPosition${i}`;
     }
   },
   mounted() {
@@ -101,18 +95,14 @@ export default {
       .to(this.$refs.cardCont, 0.375, { z: 0 }, 0.375)
       .call(this.selectImage, null, null, 0.1); // 第4引数 の position は 0.1 くらいにしないとチラつく
 
-    let dummyHeight = Math.floor(Math.random() * 500);
-    let dummyLeft = Math.floor(-Math.random() * 100);
-    TweenMax.set(this.$refs.cardDummy, {
-      top: `${dummyHeight}px`,
-      left: `${dummyLeft}px`
-    });
-    let dummyHeight2 = Math.floor(Math.random() * 500);
-    let dummyLeft2 = Math.floor(-Math.random() * 100);
-    TweenMax.set(this.$refs.cardDummy2, {
-      top: `${dummyHeight2}px`,
-      left: `${dummyLeft2}px`
-    });
+    for (let i = 1; i <= this.numDummyCards; i++) {
+      let dummyHeight = Math.floor(Math.random() * 1000);
+      let dummyLeft = Math.floor(Math.random() * 1000 - 500); // -500 ~ 500
+      TweenMax.set(`.cardDummyPosition${i}`, {
+        top: `${dummyHeight}px`,
+        left: `${dummyLeft}px`
+      });
+    }
     this.tlShuffle = new TimelineMax({
       paused: true,
       onComplete: this.destroyDummy
