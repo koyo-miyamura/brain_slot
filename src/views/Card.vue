@@ -48,6 +48,7 @@ export default {
     frontImage: require(`@/assets/card_back_yellow.png`),
     images: [],
     numDummyCards: 30,
+    drawDummyIndex: 1,
     reversed: true,
     shuffled: false,
     tlFrip: null,
@@ -74,7 +75,7 @@ export default {
       TweenMax.set(this.$refs.cardBack, { rotationY: -180 });
       this.tlFrip = new TimelineMax({
         onStart: this.changeReversedStatus,
-        onReverseComplete: this.changeReversedStatus,
+        onReverseComplete: this.changeReversedStatusAndDraw,
         paused: true
       });
       this.tlFrip
@@ -89,6 +90,15 @@ export default {
     },
     changeReversedStatus() {
       this.reversed = !this.reversed;
+    },
+    changeReversedStatusAndDraw() {
+      this.reversed = !this.reversed;
+      this.shuffled = false;
+      TweenMax.to(`.cardDummyPosition${this.drawDummyIndex}`, 1, {
+        top: "1000px",
+        onComplete: this.destroyDummy
+      });
+      this.drawDummyIndex++;
     },
     setDummyPosition() {
       for (let i = 1; i <= this.numDummyCards; i++) {
