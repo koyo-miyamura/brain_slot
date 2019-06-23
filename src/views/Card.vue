@@ -43,13 +43,19 @@ export default {
     },
     flipCard() {
       this.reversed ? this.tl.play() : this.tl.reverse();
+    },
+    changeReversedStatus() {
       this.reversed = !this.reversed;
     }
   },
   mounted() {
     this.getImageData(numImage);
     TweenMax.set(this.$refs.cardBack, { rotationY: -180 });
-    this.tl = new TimelineMax({ paused: true });
+    this.tl = new TimelineMax({
+      onStartComplete: this.changeReversedStatus,
+      onReverseComplete: this.changeReversedStatus,
+      paused: true
+    });
     this.tl
       .to(this.$refs.cardFront, 0.75, { rotationY: 180 }, 0)
       .to(this.$refs.cardBack, 0.75, { rotationY: 0 }, 0)
