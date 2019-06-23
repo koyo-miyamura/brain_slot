@@ -18,6 +18,14 @@
             >
               <v-img :src="frontImage" contain></v-img>
             </div>
+            <div
+              v-show="!shuffled"
+              class="cardDummy"
+              ref="cardDummy2"
+              @click="shuffleCard"
+            >
+              <v-img :src="frontImage" contain></v-img>
+            </div>
           </div>
         </v-layout>
       </v-flex>
@@ -62,6 +70,7 @@ export default {
     destroyDummy() {
       if (this.$refs.cardDummy != null) {
         this.$refs.cardDummy.remove();
+        this.$refs.cardDummy2.remove();
         this.shuffled = true;
       }
     }
@@ -88,10 +97,17 @@ export default {
       top: `${dummyHeight}px`,
       left: `${dummyLeft}px`
     });
-    this.tlShuffle = new TimelineMax({ paused: true });
-    this.tlShuffle
-      .to(this.$refs.cardDummy, 1, { top: 0, left: 0 })
-      .call(this.destroyDummy, null, null);
+    let dummyHeight2 = Math.floor(Math.random() * 500);
+    let dummyLeft2 = Math.floor(-Math.random() * 100);
+    TweenMax.set(this.$refs.cardDummy2, {
+      top: `${dummyHeight2}px`,
+      left: `${dummyLeft2}px`
+    });
+    this.tlShuffle = new TimelineMax({
+      paused: true,
+      onComplete: this.destroyDummy
+    });
+    this.tlShuffle.to(".cardDummy", 1, { top: 0, left: 0 });
   }
 };
 </script>
