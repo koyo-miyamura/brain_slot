@@ -4,10 +4,20 @@
       <v-flex xs12>
         <v-layout justify-center>
           <div ref="cardCont" class="cardCont" contain>
-            <div ref="cardFront" class="cardFront" @click="flipCard">
+            <div
+              v-show="shuffled"
+              ref="cardFront"
+              class="cardFront"
+              @click="flipCard"
+            >
               <v-img :src="frontImage" contain></v-img>
             </div>
-            <div ref="cardBack" class="cardBack" @click="flipCard">
+            <div
+              v-show="shuffled"
+              ref="cardBack"
+              class="cardBack"
+              @click="flipCard"
+            >
               <v-img :src="selectedImage" contain></v-img>
             </div>
             <div
