@@ -47,7 +47,7 @@ export default {
     selectedImage: "",
     frontImage: require(`@/assets/card_back_yellow.png`),
     images: [],
-    numDummyCards: 30,
+    numDummyCards: numImage, // ここ numImage と同じじゃなくてもいい
     drawDummyIndex: 1,
     reversed: true,
     shuffled: false,
@@ -98,6 +98,9 @@ export default {
         top: "1000px",
         onComplete: this.destroyDummy
       });
+      if (this.drawDummyIndex > this.numDummyCards) {
+        this.$router.go({ name: "card" }); // カード無くなったら再描画するイメージ
+      }
       this.drawDummyIndex++;
     },
     setDummyPosition() {
