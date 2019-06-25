@@ -40,6 +40,8 @@
 <script>
 import { TweenMax, TimelineMax, CSSPlugin } from "gsap";
 const numImage = 30;
+const numDummyCards = numImage; // ここ numImage と同じじゃなくてもいい
+
 CSSPlugin.defaultTransformPerspective = 1000;
 
 export default {
@@ -47,7 +49,6 @@ export default {
     selectedImage: "",
     frontImage: require(`@/assets/card_back_yellow.png`),
     images: [],
-    numDummyCards: numImage, // ここ numImage と同じじゃなくてもいい
     drawDummyIndex: 1,
     reversed: true,
     shuffled: false,
@@ -98,13 +99,13 @@ export default {
         top: "1000px",
         onComplete: this.destroyDummy
       });
-      if (this.drawDummyIndex > this.numDummyCards) {
-        this.$router.go({ name: "card" }); // カード無くなったら再描画するイメージ
+      if (this.drawDummyIndex > numDummyCards) {
+        this.$router.go({ name: "card" }); // カード無くなったら再描画する
       }
       this.drawDummyIndex++;
     },
     setDummyPosition() {
-      for (let i = 1; i <= this.numDummyCards; i++) {
+      for (let i = 1; i <= numDummyCards; i++) {
         let dummyHeight = Math.floor(Math.random() * 1000);
         let dummyLeft = Math.floor(Math.random() * 1000 - 500); // -500 ~ 500
         TweenMax.set(`.cardDummyPosition${i}`, {
