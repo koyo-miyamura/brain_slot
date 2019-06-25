@@ -40,7 +40,6 @@
 <script>
 import { TweenMax, TimelineMax, CSSPlugin } from "gsap";
 const numImage = 30;
-const numDummyCards = numImage; // ここ numImage と同じじゃなくてもいい
 
 CSSPlugin.defaultTransformPerspective = 1000;
 
@@ -50,6 +49,7 @@ export default {
     frontImage: require(`@/assets/card_back_yellow.png`),
     images: [],
     drawDummyIndex: 1,
+    numDummyCards: numImage, // ここ numImage と同じじゃなくてもいい
     reversed: true,
     shuffled: false,
     tlFrip: null,
@@ -70,7 +70,10 @@ export default {
         paused: true,
         onComplete: this.destroyDummy
       });
-      this.tlShuffle.to(".cardDummy", 1, { top: 0, left: 0 });
+      this.tlShuffle
+        .to(".cardDummy", 1, { top: 0, left: 0 })
+        .to(this.$refs.cardCont, 0.5, { z: 50 }, 0)
+        .to(this.$refs.cardCont, 0.5, { z: 50 }, 0.5);
     },
     defineFlipAnimation() {
       TweenMax.set(this.$refs.cardBack, { rotationY: -180 });
@@ -99,13 +102,13 @@ export default {
         top: "1000px",
         onComplete: this.destroyDummy
       });
-      if (this.drawDummyIndex > numDummyCards) {
+      if (this.drawDummyIndex > this.numDummyCards) {
         this.$router.go({ name: "card" }); // カード無くなったら再描画する
       }
       this.drawDummyIndex++;
     },
     setDummyPosition() {
-      for (let i = 1; i <= numDummyCards; i++) {
+      for (let i = 1; i <= this.numDummyCards; i++) {
         let dummyHeight = Math.floor(Math.random() * 1000);
         let dummyLeft = Math.floor(Math.random() * 1000 - 500); // -500 ~ 500
         TweenMax.set(`.cardDummyPosition${i}`, {
